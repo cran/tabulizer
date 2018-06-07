@@ -280,7 +280,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 
-<p><strong>tabulizer</strong> provides R bindings to the <a href="https://github.com/tabulapdf/tabula-java/">Tabula java library</a>, which can be used to computationaly extract tables from PDF documents. The main function <code>extract_tables()</code> mimics the command-line behavior of the Tabula, by extracting all tables from a PDF file and, by default, returns those tables as a list of character matrices in R.</p>
+<p><strong>tabulizer</strong> provides R bindings to the <a href="https://github.com/tabulapdf/tabula-java/">Tabula java library</a>, which can be used to computationally extract tables from PDF documents. The main function <code>extract_tables()</code> mimics the command-line behavior of the Tabula, by extracting all tables from a PDF file and, by default, returns those tables as a list of character matrices in R.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;tabulizer&quot;</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">f &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;examples&quot;</span>, <span class="st">&quot;data.pdf&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;tabulizer&quot;</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"></a>
@@ -327,7 +327,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## [7,] &quot;virginica&quot;</code></pre>
 <div id="changing-the-method-of-extraction" class="section level2">
 <h2>Changing the Method of Extraction</h2>
-<p>The default method used by <code>extract_tables()</code> mimicks the default behaviour of Tabula. For each page the function decides whether it contains one consistent table and then extracts if by using spreadsheet-tailored algorithm <code>method = &quot;lattice&quot;</code>. The correct recognition of a table depends on whether the page contains a table grid. If it doesn’t and the table is a matrix of cells with value without borders, it might not be able to recognise it. This also applies to multiple tables with different numbers of columns are present on the page. In this case another, more general, algorithm (<code>method = &quot;stream&quot;</code>) is used that relies on the distances between the values on the page.</p>
+<p>The default method used by <code>extract_tables()</code> mimics the behaviour of Tabula. For each page the algorithm decides whether it contains one consistent table and then extracts it by using spreadsheet-tailored algorithm <code>method = &quot;lattice&quot;</code>. The correct recognition of a table depends on whether the page contains a table grid. If it doesn’t and the table is a matrix of cells with values without borders, it might not be able to recognise it. This also happens when multiple tables with different number of columns are present on the same page. In those cases another, more general, algorithm <code>method = &quot;stream&quot;</code> is used, which relies on the distances between text characters on the page.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Extract tables by deciding for each page individually</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">extract_tables</span>(f2, <span class="dt">method =</span> <span class="st">&quot;decide&quot;</span>)</a></code></pre></div>
 <pre><code>## [[1]]
@@ -410,7 +410,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## [13,] &quot;VC&quot;  
 ## [14,] &quot;VC&quot;  
 ## [15,] &quot;VC&quot;</code></pre>
-<p>It is possible to specify the preferred algorithm which might be a preferred option for more difficult cases.</p>
+<p>It is possible to specify the preferred algorithm which might be a better option for more difficult cases.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># Extract tables by using &quot;lattice&quot; method</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">extract_tables</span>(f2, <span class="dt">pages =</span> <span class="dv">2</span>, <span class="dt">method =</span> <span class="st">&quot;lattice&quot;</span>)</a></code></pre></div>
 <pre><code>## [[1]]
@@ -474,15 +474,15 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## 4 148          6.5         3.0          5.2         2.0 virginica
 ## 5 149          6.2         3.4          5.4         2.3 virginica
 ## 6 150          5.9         3.0          5.1         1.8 virginica</code></pre>
-<p>Tabula itself implements three “writer” methods that write extracted tables to disk as CSV, TSV, or JSON files. These can be specified by <code>output = &quot;csv&quot;</code>, <code>output = &quot;tsv&quot;</code>, and <code>output = &quot;json&quot;</code>, respectively. For CSV and TSV, one file is written to disk for each table, in the same directory as the original file (or the temporary directory if the file is a remote PDF). For JSON, one file is written containing information about all tables. For these methods, <code>extract_tables()</code> returns a path to the directory containing the output files.</p>
+<p>Tabula itself implements three “writer” methods that write extracted tables to disk as CSV, TSV, or JSON files. These can be specified by <code>output = &quot;csv&quot;</code>, <code>output = &quot;tsv&quot;</code>, and <code>output = &quot;json&quot;</code>, respectively. For CSV and TSV, one file is written to disk for each table and R session’s temporary directory <code>tempdir()</code> is used by default (alternatively, the directory can be specified through <code>output</code> argument). For JSON, one file is written containing information about all tables. For these methods, <code>extract_tables()</code> returns a path to the directory containing the output files.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># extract tables to CSVs</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">extract_tables</span>(f, <span class="dt">output =</span> <span class="st">&quot;csv&quot;</span>)</a></code></pre></div>
-<pre><code>## [1] &quot;/tmp/RtmpyRFEte/Rinst74931f2561e6/tabulizer/examples&quot;</code></pre>
+<pre><code>## [1] &quot;/tmp/Rtmp176jnc&quot;</code></pre>
 <p>If none of the standard methods works well, you can specify <code>output = &quot;asis&quot;</code> to return an rJava “jobjRef” object, which is a pointer to a Java ArrayList of Tabula Table objects. Working with that object might be quite awkward as it requires knowledge of Java and Tabula’s internals, but might be useful to advanced users for debugging purposes.</p>
 </div>
 <div id="extracting-areas" class="section level2">
 <h2>Extracting Areas</h2>
-<p>By default, tabulizer uses Tabula’s table detection algorithms to automatically identify tables within each page of a PDF. This automatic detection can be toggled off by setting <code>guess = FALSE</code> and specifying an “area” within each PDF page to extract the table from. Here is a comparison of the default settings, versus extracting from two alternative areas within a page:</p>
+<p>By default, tabulizer uses Tabula’s table detection algorithm to automatically identify tables within each page of a PDF. This automatic detection can be toggled off by setting <code>guess = FALSE</code> and specifying an “area” within each PDF page to extract the table from. Here is a comparison of the default settings, versus extracting from two alternative areas within a page:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">str</span>(<span class="kw">extract_tables</span>(f, <span class="dt">pages =</span> <span class="dv">2</span>, <span class="dt">guess =</span> <span class="ot">TRUE</span>, <span class="dt">output =</span> <span class="st">&quot;data.frame&quot;</span>))</a></code></pre></div>
 <pre><code>## List of 2
 ##  $ :'data.frame':    6 obs. of  5 variables:

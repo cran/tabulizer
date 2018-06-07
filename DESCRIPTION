@@ -1,7 +1,7 @@
 Package: tabulizer
 Type: Package
 Title: Bindings for 'Tabula' PDF Table Extractor Library
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(person("Thomas J.", "Leeper",
                     role = "aut", 
                     email = "thosjleeper@gmail.com",
@@ -31,10 +31,10 @@ SystemRequirements: Java (>= 7.0)
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2018-05-21 14:22:01 UTC; tom
+Packaged: 2018-06-07 18:54:38 UTC; tom
 Author: Thomas J. Leeper [aut] (<https://orcid.org/0000-0003-4097-6326>),
   Tom Paskhalis [cre] (<https://orcid.org/0000-0001-9298-8850>),
   David Gohel [ctb] (rOpenSci reviewer),
   Lincoln Mullen [ctb] (rOpenSci reviewer)
 Repository: CRAN
-Date/Publication: 2018-05-24 11:55:24 UTC
+Date/Publication: 2018-06-07 19:16:06 UTC
